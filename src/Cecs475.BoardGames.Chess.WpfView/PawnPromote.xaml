@@ -1,0 +1,33 @@
+﻿<Window x:Class="Cecs475.BoardGames.Chess.WpfView.PawnPromote"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Cecs475.BoardGames.Chess.WpfView"
+        mc:Ignorable="d"
+        Title="PawnPromote" Height="65" Width="320"
+        WindowStyle = "None"
+        ResizeMode="NoResize">
+    
+    
+
+    <StackPanel Orientation="Horizontal">
+        <Label x:Name="promoteLabel" VerticalContentAlignment="Center" Width="120">Promote pawn to:</Label>
+        <Border BorderThickness="1" BorderBrush="Black"
+                        MouseEnter="BorderQueen_MouseEnter" MouseLeave="Border_MouseLeave" MouseUp="BorderQueen_MouseUp" Width="50">
+            <Image Name="Queen" />
+        </Border>
+        <Border BorderThickness="1" BorderBrush="Black"
+                        MouseEnter="BorderRook_MouseEnter" MouseLeave="Border_MouseLeave" MouseUp="BorderRook_MouseUp" Width="50">
+            <Image Name="Rook"/>
+        </Border>
+        <Border BorderThickness="1" BorderBrush="Black" 
+                        MouseEnter="BorderBishop_MouseEnter" MouseLeave="Border_MouseLeave" MouseUp="BorderBishop_MouseUp" Width="50">
+            <Image Name="Bishop"/>
+        </Border>
+        <Border BorderThickness="1" BorderBrush="Black"
+                        MouseEnter="BorderKnight_MouseEnter" MouseLeave="Border_MouseLeave" MouseUp="BorderKnight_MouseUp" Width="50">
+            <Image Name="Knight"/>
+        </Border>
+    </StackPanel>
+</Window>

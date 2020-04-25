@@ -1,0 +1,17 @@
+﻿<Window x:Class="Cecs475.BoardGames.Chess.WpfView.PawnPromotion"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Cecs475.BoardGames.Chess.WpfView"
+        mc:Ignorable="d"
+        Title="PawnPromotion" Height="50" Width="800"
+        WindowStyle="None">
+    <StackPanel Orientation="Horizontal">
+        <Button x:Name="mWrapBtn" Click="mWrapBtn_Click">Wrap Panel</Button>
+        <Button x:Name="mDockBtn" Click="mDockBtn_Click">Dock Panel</Button>
+        <Button x:Name="mStackBtn" Click="mStackBtn_Click">Stack Panel</Button>
+        <Button x:Name="mGridBtn" Click="mGridBtn_Click">Grid Layout</Button>
+    </StackPanel>
+
+</Window>
