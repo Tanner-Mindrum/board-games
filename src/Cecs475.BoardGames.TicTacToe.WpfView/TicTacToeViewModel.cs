@@ -1,4 +1,5 @@
 ﻿using Cecs475.BoardGames;
+using Cecs475.BoardGames.ComputerOpponent;
 using Cecs475.BoardGames.Model;
 using Cecs475.BoardGames.TicTacToe.Model;
 using Cecs475.BoardGames.WpfView;
@@ -41,6 +42,8 @@ namespace Cecs475.BoardGames.TicTacToe.WpfView {
 	public class TicTacToeViewModel : IGameViewModel, INotifyPropertyChanged {
 		private TicTacToeBoard mBoard;
 		private ObservableCollection<TicTacToeSquare> mSquares;
+		private const int MAX_AI_DEPTH = 9;
+		private IGameAi mGameAi = new MinimaxAi(MAX_AI_DEPTH);
 
 		public event EventHandler GameFinished;
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -73,6 +76,13 @@ namespace Cecs475.BoardGames.TicTacToe.WpfView {
 				}
 			}
 
+			if (Players == NumberOfPlayers.One && !mBoard.IsFinished) {
+				var bestMove = mGameAi.FindBestMove(mBoard);
+				if (bestMove != null) {
+					mBoard.ApplyMove(bestMove as TicTacToeMove);
+				}
+			}
+
 			RebindState();
 			if (mBoard.IsFinished)
 				GameFinished?.Invoke(this, new EventArgs());
@@ -85,11 +95,15 @@ namespace Cecs475.BoardGames.TicTacToe.WpfView {
 			}
 			OnPropertyChanged(nameof(BoardAdvantage));
 			OnPropertyChanged(nameof(CurrentPlayer));
+			OnPropertyChanged(nameof(CanUndo));
 		}
 
 		public void UndoMove() {
 			if (CanUndo) {
 				mBoard.UndoLastMove();
+				if (Players == NumberOfPlayers.One && CanUndo) {
+					mBoard.UndoLastMove();
+				}
 				RebindState();
 			}
 		}
@@ -107,6 +121,8 @@ namespace Cecs475.BoardGames.TicTacToe.WpfView {
 		public int CurrentPlayer => mBoard.CurrentPlayer;
 
 		public bool CanUndo => mBoard.MoveHistory.Any();
+
+		public NumberOfPlayers Players { get; set; }
 	}
 
 	/// <summary>

@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cecs475.BoardGames.TicTacTo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cecs475.BoardGames.Chess.WpfView", "src\Cecs475.BoardGames.Chess.WpfView\Cecs475.BoardGames.Chess.WpfView.csproj", "{A453F6F4-83C9-4436-901D-A80ADDD93100}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cecs475.BoardGames.ComputerOpponent", "src\Cecs475.BoardGames.ComputerOpponent\Cecs475.BoardGames.ComputerOpponent.csproj", "{E9251E73-156B-4632-8C0E-4974343859D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +105,10 @@ Global
 		{A453F6F4-83C9-4436-901D-A80ADDD93100}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A453F6F4-83C9-4436-901D-A80ADDD93100}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A453F6F4-83C9-4436-901D-A80ADDD93100}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9251E73-156B-4632-8C0E-4974343859D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9251E73-156B-4632-8C0E-4974343859D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9251E73-156B-4632-8C0E-4974343859D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9251E73-156B-4632-8C0E-4974343859D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,6 +129,7 @@ Global
 		{8B69E987-CC12-47CF-82B0-87D608AA69F3} = {76011B83-D04B-4ABA-AEF1-95B95CCA77DA}
 		{7A7F7912-0B8A-4C8C-9421-52BEA6BC840D} = {76011B83-D04B-4ABA-AEF1-95B95CCA77DA}
 		{A453F6F4-83C9-4436-901D-A80ADDD93100} = {76011B83-D04B-4ABA-AEF1-95B95CCA77DA}
+		{E9251E73-156B-4632-8C0E-4974343859D6} = {76011B83-D04B-4ABA-AEF1-95B95CCA77DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4AEF5D45-27E2-4692-B733-56FC113DA496}

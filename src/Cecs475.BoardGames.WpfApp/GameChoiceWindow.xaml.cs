@@ -22,15 +22,16 @@ namespace Cecs475.BoardGames.WpfApp {
 	public partial class GameChoiceWindow : Window {
 		public GameChoiceWindow() {
 			Type gameFactory = typeof(IWpfGameFactory);
-			string inputFolderDir = @"C:\CECS 475\finalproject3\board-games\src\Cecs475.BoardGames.WpfApp\bin\Debug\games";
+			string inputFolderDir = @"games";
+
 			var dlls = from someFile in Directory.EnumerateFiles(inputFolderDir, "*", SearchOption.AllDirectories)
 						select new {
 							File = someFile
 						};
+
 			foreach (var dllFile in dlls) {
-				if (System.IO.Path.GetExtension(dllFile.File) == ".dll") {
+				if (System.IO.Path.GetExtension(dllFile.File) == ".dll")
 					Assembly.LoadFrom(dllFile.File);
-				}
 			}
 
 			var finalTypes = new List<Type>();
@@ -38,18 +39,17 @@ namespace Cecs475.BoardGames.WpfApp {
 			foreach (var assemb in assemblies) {
 				var types = assemb.GetTypes();
 				foreach (Type t in types) {
-					if (gameFactory.IsAssignableFrom(t) && t.IsClass) {
+					if (gameFactory.IsAssignableFrom(t) && t.IsClass)
 						finalTypes.Add(t);
-					}
 				}
 			}
 
-			var objs = from finalObjs in finalTypes
-					   select new {
-						   Object = finalObjs.GetConstructor(Type.EmptyTypes)
-					   };
+			var gameFactories = new List<IWpfGameFactory>();
+			foreach (Type t in finalTypes) {
+				gameFactories.Add((IWpfGameFactory)Activator.CreateInstance(t));
+			}
 
-			this.Resources.Add(objs, "GameTypes");
+			this.Resources.Add("GameTypes", gameFactories);
 
 			InitializeComponent();
 		}
