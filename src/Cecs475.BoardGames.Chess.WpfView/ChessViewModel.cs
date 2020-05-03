@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cecs475.BoardGames.ComputerOpponent;
 
 namespace Cecs475.BoardGames.Chess.WpfView {
 	public class ChessSquare : INotifyPropertyChanged {
@@ -94,6 +95,8 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 		private ChessBoard mBoard;
 		private ObservableCollection<ChessSquare> mSquares;
 		public event EventHandler GameFinished;
+		private const int MAX_AI_DEPTH = 7;
+		private IGameAi mGameAi = new MinimaxAi(MAX_AI_DEPTH);
 
 		public ChessViewModel() {
 			mBoard = new ChessBoard();
@@ -155,6 +158,14 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 					}
 				}
 			}
+
+			if (Players == NumberOfPlayers.One && !mBoard.IsFinished) {
+				var bestMove = mGameAi.FindBestMove(mBoard);
+				if (bestMove != null) {
+					mBoard.ApplyMove(bestMove as ChessMove);
+				}
+			}
+
 
 			RebindState();
 
@@ -238,9 +249,16 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 		}
 
+		public NumberOfPlayers Players { get; set; }
+
 		public void UndoMove() {
 			if (CanUndo) {
 				mBoard.UndoLastMove();
+				// In one-player mode, Undo has to remove an additional move to return to the
+				// human player's turn.
+				if (Players == NumberOfPlayers.One && CanUndo) {
+					mBoard.UndoLastMove();
+				}
 				RebindState();
 			}
 		}

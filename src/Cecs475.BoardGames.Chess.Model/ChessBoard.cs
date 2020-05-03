@@ -983,6 +983,8 @@ namespace Cecs475.BoardGames.Chess.Model {
 			ApplyMove(m as ChessMove);
 		}
 		IReadOnlyList<IGameMove> IGameBoard.MoveHistory => mMoveHistory;
+
+		public long BoardWeight => throw new NotImplementedException();
 		#endregion
 
 		// You may or may not need to add code to this constructor.

@@ -55,6 +55,10 @@
     <Compile Include="TicTacToeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Cecs475.BoardGames.ComputerOpponent\Cecs475.BoardGames.ComputerOpponent.csproj">
+      <Project>{e9251e73-156b-4632-8c0e-4974343859d6}</Project>
+      <Name>Cecs475.BoardGames.ComputerOpponent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Cecs475.BoardGames.Model\Cecs475.BoardGames.Model.csproj">
       <Project>{E30836FA-92E0-4787-9237-DC750C339FB9}</Project>
       <Name>Cecs475.BoardGames.Model</Name>
