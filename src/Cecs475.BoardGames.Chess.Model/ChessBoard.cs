@@ -50,7 +50,8 @@ namespace Cecs475.BoardGames.Chess.Model {
 
 		public bool IsFinished {
 			get {
-				return IsCheckmate || IsStalemate || IsDraw;
+				//return IsCheckmate || IsStalemate || IsDraw;
+				return GetPossibleMoves().Any() || IsDraw;
 			}
 		}
 
@@ -211,6 +212,7 @@ namespace Cecs475.BoardGames.Chess.Model {
 
 		#region Public methods.
 		public IEnumerable<ChessMove> GetPossibleMoves() {
+			/*if (mMoves != null) return mMoves*/
 			ISet<ChessMove> possibleMoves = new HashSet<ChessMove>();
 			var positions = BoardPosition.GetRectangularPositions(8, 8);
 			HashSet<BoardPosition> attackPositions = new HashSet<BoardPosition>();
@@ -518,6 +520,7 @@ namespace Cecs475.BoardGames.Chess.Model {
 			}
 
 			return validMoves;
+			//return mMoves = moves;
 		}
 
 		public void ApplyMove(ChessMove m) {
@@ -692,6 +695,7 @@ namespace Cecs475.BoardGames.Chess.Model {
 			currentPlayer = (currentPlayer == 1) ? 2 : 1;
 			gameStateList.Add(gameState);
 			mMoveHistory.Add(m);
+			//mMoves = null
 		}
 
 
@@ -810,6 +814,7 @@ namespace Cecs475.BoardGames.Chess.Model {
 
 			gameStateList.RemoveAt(gameStateList.Count - 1);
 			mMoveHistory.RemoveAt(mMoveHistory.Count - 1);
+			//mMoves = null;
 		}
 
 		/// <summary>
@@ -984,7 +989,9 @@ namespace Cecs475.BoardGames.Chess.Model {
 		}
 		IReadOnlyList<IGameMove> IGameBoard.MoveHistory => mMoveHistory;
 
-		public long BoardWeight => throw new NotImplementedException();
+		public long BoardWeight {
+			get; private set;
+		}
 		#endregion
 
 		// You may or may not need to add code to this constructor.

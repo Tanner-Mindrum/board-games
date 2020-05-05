@@ -18,37 +18,40 @@ namespace Cecs475.BoardGames.ComputerOpponent {
 		}
 
 		public IGameMove FindBestMove(IGameBoard b) {
-			return FindBestMove(b,
+			/*return FindBestMove(b,
 				true ? long.MinValue : long.MaxValue,
 				true ? long.MaxValue : long.MinValue,
-				mMaxDepth).Move;
+				mMaxDepth).Move;*/
+			return FindBestMove(b,
+			mMaxDepth,
+			b.CurrentPlayer == 1).Move;
 		}
 
-		private static MinimaxBestMove FindBestMove(IGameBoard b, long alpha, long beta, int depthLeft) {
-			if (depthLeft == 0 || b.IsFinished)
-				return new MinimaxBestMove() {
+		private static MinimaxBestMove FindBestMove(IGameBoard b, long depth, bool isMaximizing) {
+			if (depth == 0 || b.IsFinished)
+				return new MinimaxBestMove {
 					Weight = b.BoardWeight,
 					Move = null
 				};
 
 			long bestWeight;
-			bestWeight = (b.CurrentPlayer == 2) ? long.MinValue : long.MaxValue;
+			bestWeight = (isMaximizing) ? long.MinValue : long.MaxValue;
 			IGameMove bestMove = null;
 			
 			IEnumerable<IGameMove> possMoves = b.GetPossibleMoves();
 			foreach (IGameMove move in possMoves) {
 				b.ApplyMove(move);
-				long w = (FindBestMove(b, alpha, beta, depthLeft - 1)).Weight;
+				long w = (FindBestMove(b, depth - 1, !isMaximizing)).Weight;
 				b.UndoLastMove();
-				if (b.CurrentPlayer == 2 && w > bestWeight) {
+				if (isMaximizing && w > bestWeight) {
 					bestWeight = w;
 					bestMove = move;
-				} else if (b.CurrentPlayer == 1 && w < bestWeight) {
+				} else if (!isMaximizing && w < bestWeight) {
 					bestWeight = w;
 					bestMove = move;
 				}
 			}
-			return new MinimaxBestMove() {
+			return new MinimaxBestMove {
 				Weight = bestWeight,
 				Move = bestMove
 			};

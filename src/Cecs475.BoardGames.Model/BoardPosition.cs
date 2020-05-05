@@ -74,8 +74,8 @@ namespace Cecs475.BoardGames.Model {
 		/// <param name="rows">the number of horizontal rows on the board</param>
 		/// <param name="cols">the number of vertical columns on the board</param>
 		public static IEnumerable<BoardPosition> GetRectangularPositions(int rows, int cols) {
-			return Enumerable.Range(0, 8).SelectMany(
-				r => Enumerable.Range(0, 8),
+			return Enumerable.Range(0, rows).SelectMany(
+				r => Enumerable.Range(0, cols),
 				(r, c) => new BoardPosition(r, c));
 		}
 
