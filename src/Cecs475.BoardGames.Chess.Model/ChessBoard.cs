@@ -931,6 +931,31 @@ namespace Cecs475.BoardGames.Chess.Model {
 			}
 			return attackedPositions;
 		}
+
+		public List<BoardPosition> GetAttackedPositions2(int byPlayer) {
+			List<BoardPosition> attackedPositions = new List<BoardPosition>();
+			var positions = BoardPosition.GetRectangularPositions(8, 8);
+
+			foreach (BoardPosition p in positions) {
+				var piece = GetPieceAtPosition(p);
+				if (byPlayer == piece.Player) {
+					if (piece.PieceType == ChessPieceType.Rook) {
+						attackedPositions.AddRange(RookAttackPos(p));
+					} else if (piece.PieceType == ChessPieceType.Bishop) {
+						attackedPositions.AddRange(BishopAttackPos(p));
+					} else if (piece.PieceType == ChessPieceType.Queen) {
+						attackedPositions.AddRange(QueenAttackPos(p));
+					} else if (piece.PieceType == ChessPieceType.King) {
+						attackedPositions.AddRange(KingAttackPos(p));
+					} else if (piece.PieceType == ChessPieceType.Pawn) {
+						attackedPositions.AddRange(PawnAttackPos(p, byPlayer));
+					} else if (piece.PieceType == ChessPieceType.Knight) {
+						attackedPositions.AddRange(KnightAttackPos(p));
+					}
+				}
+			}
+			return attackedPositions;
+		}
 		#endregion
 
 		#region Private methods.
@@ -989,24 +1014,31 @@ namespace Cecs475.BoardGames.Chess.Model {
 		}
 		IReadOnlyList<IGameMove> IGameBoard.MoveHistory => mMoveHistory;
 
-		/*		public long BoardWeight {
-					get {
-						if (currentPlayer == 1) {
-							long longWeight = advantage;
-							return longWeight;
-						} else {
-							long longWeight = advantage * -1;
-							return longWeight;
-						}
-					} 
-				}*/
-
 		public long BoardWeight {
 			get {
-				var adv = CurrentAdvantage;
+				int blackAdv = new GameAdvantage(2, advantage * -1).Advantage;
+				int whiteAdv =	new GameAdvantage(1, advantage).Advantage;
 				var positions = BoardPosition.GetRectangularPositions(8, 8);
 				long whiteWeight, blackWeight;
-				int whitePawnPoints = 0, blackPawnPoints = 0, whiteThreatenPoints = 0, blackThreatenPoints = 0;
+				int whitePawnPoints = 0, blackPawnPoints = 0, whiteThreatenPoints = 0, blackThreatenPoints = 0,
+					whiteProtectPoints = 0, blackProtectPoints = 0;
+				var whiteAttackPositions = GetAttackedPositions2(1);
+				var blackAttackPositions = GetAttackedPositions2(2);
+
+				foreach (BoardPosition attPos in whiteAttackPositions) {
+					var currAttPiece = GetPieceAtPosition(attPos);
+					if (currAttPiece.PieceType == ChessPieceType.Knight || currAttPiece.PieceType == ChessPieceType.Knight) {
+						whiteProtectPoints++;
+					}
+				}
+
+				foreach (BoardPosition attPos in blackAttackPositions) {
+					var currAttPiece = GetPieceAtPosition(attPos);
+					if (currAttPiece.PieceType == ChessPieceType.Knight || currAttPiece.PieceType == ChessPieceType.Knight) {
+						blackProtectPoints++;
+					}
+				}
+
 				foreach (BoardPosition pos in positions) {
 					var currPiece = GetPieceAtPosition(pos);
 					if (currPiece.PieceType == ChessPieceType.Pawn && currPiece.Player == 2) {
@@ -1015,6 +1047,9 @@ namespace Cecs475.BoardGames.Chess.Model {
 					else if (currPiece.PieceType == ChessPieceType.Pawn && currPiece.Player == 1) {
 						whitePawnPoints = 6 - pos.Row;
 					}
+
+
+					
 					//These else if statement will check to see if a piece is attacked at the current position
 					//By the opposite player, then will add points accordingly
 					else if ((currPiece.PieceType == ChessPieceType.Knight && currPiece.Player == 2) || (currPiece.PieceType == ChessPieceType.Bishop && currPiece.Player == 2)) {
@@ -1032,16 +1067,35 @@ namespace Cecs475.BoardGames.Chess.Model {
 						if (attackedPiece)
 							whiteThreatenPoints += 2;
 					}
-
 					else if (currPiece.PieceType == ChessPieceType.Rook && currPiece.Player == 1) {
 						var attackedPiece = PositionIsAttacked(pos, 2);
 						if (attackedPiece)
 							blackThreatenPoints += 2;
 					}
+					else if (currPiece.PieceType == ChessPieceType.Queen && currPiece.Player == 2) {
+						var attackedPiece = PositionIsAttacked(pos, 1);
+						if (attackedPiece)
+							whiteThreatenPoints += 5;
+					}
+					else if (currPiece.PieceType == ChessPieceType.Queen && currPiece.Player == 1) {
+						var attackedPiece = PositionIsAttacked(pos, 2);
+						if (attackedPiece)
+							blackThreatenPoints += 5;
+					}
+					else if (currPiece.PieceType == ChessPieceType.King && currPiece.Player == 2) {
+						var attackedPiece = PositionIsAttacked(pos, 1);
+						if (attackedPiece)
+							whiteThreatenPoints += 4;
+					}
+					else if (currPiece.PieceType == ChessPieceType.King && currPiece.Player == 1) {
+						var attackedPiece = PositionIsAttacked(pos, 2);
+						if (attackedPiece)
+							blackThreatenPoints += 4;
+					}
 
 				}
-
-
+				return (whiteAdv + whitePawnPoints + whiteThreatenPoints + whiteProtectPoints) -
+					(blackAdv + blackPawnPoints + blackThreatenPoints + blackProtectPoints);
 			}
 		}
 		#endregion
