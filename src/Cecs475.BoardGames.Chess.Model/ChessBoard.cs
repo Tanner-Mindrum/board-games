@@ -1002,7 +1002,24 @@ namespace Cecs475.BoardGames.Chess.Model {
 				}*/
 
 		public long BoardWeight {
-			get; private set;
+			get {
+				var adv = CurrentAdvantage;
+				var positions = BoardPosition.GetRectangularPositions(8, 8);
+				long whiteWeight, blackWeight;
+				int whitePawnPoints, blackPawnPoints, whiteThreatenPoints, blackThreatenPoints;
+				foreach (BoardPosition pos in positions) {
+					var currPiece = GetPieceAtPosition(pos);
+					if (currPiece.PieceType == ChessPieceType.Pawn && currPiece.Player == 2) {
+						blackPawnPoints = pos.Row - 1;
+					}
+					else if (currPiece.PieceType == ChessPieceType.Pawn && currPiece.Player == 1) {
+						whitePawnPoints = 6 - pos.Row;
+					}
+
+				}
+
+
+			}
 		}
 		#endregion
 
