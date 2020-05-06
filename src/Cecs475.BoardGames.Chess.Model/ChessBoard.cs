@@ -50,8 +50,8 @@ namespace Cecs475.BoardGames.Chess.Model {
 
 		public bool IsFinished {
 			get {
-				//return IsCheckmate || IsStalemate || IsDraw;
-				return GetPossibleMoves().Any() || IsDraw;
+				return IsCheckmate || IsStalemate || IsDraw;
+				//return GetPossibleMoves().Any() || IsDraw;
 			}
 		}
 
@@ -988,6 +988,18 @@ namespace Cecs475.BoardGames.Chess.Model {
 			ApplyMove(m as ChessMove);
 		}
 		IReadOnlyList<IGameMove> IGameBoard.MoveHistory => mMoveHistory;
+
+		/*		public long BoardWeight {
+					get {
+						if (currentPlayer == 1) {
+							long longWeight = advantage;
+							return longWeight;
+						} else {
+							long longWeight = advantage * -1;
+							return longWeight;
+						}
+					} 
+				}*/
 
 		public long BoardWeight {
 			get; private set;

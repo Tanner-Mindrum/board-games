@@ -63,7 +63,7 @@ namespace Cecs475.BoardGames.Othello.WpfView {
 		private OthelloBoard mBoard;
 		private ObservableCollection<OthelloSquare> mSquares;
 		public event EventHandler GameFinished;
-		private const int MAX_AI_DEPTH = 7;
+		private const int MAX_AI_DEPTH = 6;
 		private IGameAi mGameAi = new MinimaxAi(MAX_AI_DEPTH);
 
 		public OthelloViewModel() {

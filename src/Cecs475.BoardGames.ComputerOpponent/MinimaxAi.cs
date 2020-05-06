@@ -22,17 +22,21 @@ namespace Cecs475.BoardGames.ComputerOpponent {
 				true ? long.MinValue : long.MaxValue,
 				true ? long.MaxValue : long.MinValue,
 				mMaxDepth).Move;*/
+			if (mMaxDepth == 0) { }
 			return FindBestMove(b,
 			mMaxDepth,
 			b.CurrentPlayer == 1).Move;
 		}
 
 		private static MinimaxBestMove FindBestMove(IGameBoard b, long depth, bool isMaximizing) {
-			if (depth == 0 || b.IsFinished)
+			if (depth == 0 || b.IsFinished) {
+				long l = b.BoardWeight;
 				return new MinimaxBestMove {
 					Weight = b.BoardWeight,
 					Move = null
 				};
+			}
+			
 
 			long bestWeight;
 			bestWeight = (isMaximizing) ? long.MinValue : long.MaxValue;

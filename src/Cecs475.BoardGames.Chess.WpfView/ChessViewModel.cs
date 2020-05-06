@@ -95,7 +95,7 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 		private ChessBoard mBoard;
 		private ObservableCollection<ChessSquare> mSquares;
 		public event EventHandler GameFinished;
-		private const int MAX_AI_DEPTH = 7;
+		private const int MAX_AI_DEPTH = 4;
 		private IGameAi mGameAi = new MinimaxAi(MAX_AI_DEPTH);
 
 		public ChessViewModel() {
