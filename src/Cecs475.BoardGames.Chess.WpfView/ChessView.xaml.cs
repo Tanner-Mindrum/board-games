@@ -47,6 +47,10 @@ namespace Cecs475.BoardGames.Chess.WpfView {
             }
         }
 
+        private void msgBox(object sender, RoutedEventArgs e) {
+            MessageBox.Show("Hello, world!");
+        }
+
         private void Border_MouseLeave(object sender, MouseEventArgs e) {
             Border b = sender as Border;
             var square = b.DataContext as ChessSquare;

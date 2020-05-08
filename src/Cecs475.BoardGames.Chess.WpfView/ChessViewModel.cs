@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cecs475.BoardGames.ComputerOpponent;
+using System.Windows;
 
 namespace Cecs475.BoardGames.Chess.WpfView {
 	public class ChessSquare : INotifyPropertyChanged {
@@ -160,7 +161,7 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 			}
 
 			if (Players == NumberOfPlayers.One && !mBoard.IsFinished) {
-				var bestMove = mGameAi.FindBestMove(mBoard);
+				var bestMove = mGameAi.FindBestMoveAsync(mBoard);
 				if (bestMove != null) {
 					mBoard.ApplyMove(bestMove as ChessMove);
 				}
@@ -172,6 +173,8 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 			if (mBoard.IsFinished) {
 				GameFinished?.Invoke(this, new EventArgs());
 			}
+
+			//MessageBoxResult result = MessageBox.Show(mBoard.BoardWeight.ToString());
 		}
 
 		private void RebindState() {

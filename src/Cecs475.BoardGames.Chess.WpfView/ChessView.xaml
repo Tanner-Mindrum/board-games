@@ -15,6 +15,8 @@
         <local:ChessSquareBackgroundConverter x:Key="BackgroundColor"/>
         <local:ChessSquareImageConverter x:Key="Image"/>
     </UserControl.Resources>
+    
+    
 
 
     <!-- 

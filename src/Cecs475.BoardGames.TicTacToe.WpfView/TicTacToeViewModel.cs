@@ -77,7 +77,7 @@ namespace Cecs475.BoardGames.TicTacToe.WpfView {
 			}
 
 			if (Players == NumberOfPlayers.One && !mBoard.IsFinished) {
-				var bestMove = mGameAi.FindBestMove(mBoard);
+				var bestMove = mGameAi.FindBestMoveAsync(mBoard);
 				if (bestMove != null) {
 					mBoard.ApplyMove(bestMove as TicTacToeMove);
 				}

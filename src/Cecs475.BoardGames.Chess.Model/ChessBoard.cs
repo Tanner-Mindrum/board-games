@@ -50,8 +50,8 @@ namespace Cecs475.BoardGames.Chess.Model {
 
 		public bool IsFinished {
 			get {
-				return IsCheckmate || IsStalemate || IsDraw;
-				//return GetPossibleMoves().Any() || IsDraw;
+				//return IsCheckmate || IsStalemate || IsDraw;
+				return !GetPossibleMoves().Any() || IsDraw;
 			}
 		}
 
@@ -1042,14 +1042,12 @@ namespace Cecs475.BoardGames.Chess.Model {
 				foreach (BoardPosition pos in positions) {
 					var currPiece = GetPieceAtPosition(pos);
 					if (currPiece.PieceType == ChessPieceType.Pawn && currPiece.Player == 2) {
-						blackPawnPoints = pos.Row - 1;
+						blackPawnPoints += pos.Row - 1;
 					}
 					else if (currPiece.PieceType == ChessPieceType.Pawn && currPiece.Player == 1) {
-						whitePawnPoints = 6 - pos.Row;
+						whitePawnPoints += 6 - pos.Row;
 					}
 
-
-					
 					//These else if statement will check to see if a piece is attacked at the current position
 					//By the opposite player, then will add points accordingly
 					else if ((currPiece.PieceType == ChessPieceType.Knight && currPiece.Player == 2) || (currPiece.PieceType == ChessPieceType.Bishop && currPiece.Player == 2)) {

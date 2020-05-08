@@ -17,46 +17,46 @@ namespace Cecs475.BoardGames.ComputerOpponent {
 			mMaxDepth = maxDepth;
 		}
 
-		public IGameMove FindBestMove(IGameBoard b) {
-			/*return FindBestMove(b,
-				true ? long.MinValue : long.MaxValue,
-				true ? long.MaxValue : long.MinValue,
-				mMaxDepth).Move;*/
-			if (mMaxDepth == 0) { }
+		public IGameMove FindBestMoveAsync(IGameBoard b) {
 			return FindBestMove(b,
-			mMaxDepth,
-			b.CurrentPlayer == 1).Move;
+					long.MinValue,
+					long.MaxValue,
+					mMaxDepth, b.CurrentPlayer == 1).Move;
 		}
 
-		private static MinimaxBestMove FindBestMove(IGameBoard b, long depth, bool isMaximizing) {
-			if (depth == 0 || b.IsFinished) {
-				long l = b.BoardWeight;
-				return new MinimaxBestMove {
+		private static async Task<MinimaxBestMove> FindBestMove(IGameBoard b, long alpha, long beta, int depthLeft, bool isMaximizing) {
+			if (depthLeft == 0 || b.IsFinished) {
+				return new Task<MinimaxBestMove> {
 					Weight = b.BoardWeight,
 					Move = null
 				};
 			}
-			
 
-			long bestWeight;
-			bestWeight = (isMaximizing) ? long.MinValue : long.MaxValue;
 			IGameMove bestMove = null;
-			
-			IEnumerable<IGameMove> possMoves = b.GetPossibleMoves();
+			var possMoves = b.GetPossibleMoves();
 			foreach (IGameMove move in possMoves) {
 				b.ApplyMove(move);
-				long w = (FindBestMove(b, depth - 1, !isMaximizing)).Weight;
+				long w = FindBestMove(b, alpha, beta, depthLeft - 1, !isMaximizing).Weight;
 				b.UndoLastMove();
-				if (isMaximizing && w > bestWeight) {
-					bestWeight = w;
-					bestMove = move;
-				} else if (!isMaximizing && w < bestWeight) {
-					bestWeight = w;
+				if (isMaximizing && w > alpha) {
+					alpha = w;
 					bestMove = move;
 				}
+				else if (!isMaximizing && w < beta) {
+					beta = w;
+					bestMove = move;
+				}
+
+				if (alpha >= beta) {
+					return new MinimaxBestMove {
+						Weight = (isMaximizing) ? beta : alpha,
+						Move = bestMove
+					};
+				}
 			}
+
 			return new MinimaxBestMove {
-				Weight = bestWeight,
+				Weight = (isMaximizing) ? alpha : beta,
 				Move = bestMove
 			};
 		}
