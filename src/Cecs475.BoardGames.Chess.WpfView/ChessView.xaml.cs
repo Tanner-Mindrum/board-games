@@ -26,11 +26,12 @@ namespace Cecs475.BoardGames.Chess.WpfView {
             InitializeComponent();
         }
         private void Border_MouseEnter(object sender, MouseEventArgs e) {
+            if (!IsEnabled)
+                return;
+
             Border b = sender as Border;
             var square = b.DataContext as ChessSquare;
             var vm = FindResource("vm") as ChessViewModel;
-
-            //square.IsCheck = (vm.IsCheck == true) ? true : false;
           
             if (selectedSquare != null) {
                 foreach (ChessMove m in vm.PossibleMoves) {
@@ -40,9 +41,8 @@ namespace Cecs475.BoardGames.Chess.WpfView {
                         }
                     }
                 }
-            } /*else if (vm.IsCheck) {
-                square.IsCheck = true;
-            }*/ else if (vm.PossibleStartMoves.Contains(square.Position)) {
+            }
+            else if (vm.PossibleStartMoves.Contains(square.Position)) {
                 square.IsHighlighted = true;
             }
         }
@@ -63,6 +63,9 @@ namespace Cecs475.BoardGames.Chess.WpfView {
         public IGameViewModel ViewModel => ChessViewModel;
 
         private async void Border_MouseUp(object sender, MouseButtonEventArgs e) {
+            if (!IsEnabled)
+                return;
+
             Border b = sender as Border;
             var square = b.DataContext as ChessSquare;
             var vm = FindResource("vm") as ChessViewModel;
