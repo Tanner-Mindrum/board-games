@@ -3,6 +3,6 @@ using System;
 
 namespace Cecs475.BoardGames.ComputerOpponent {
 	public interface IGameAi {
-		IGameMove FindBestMoveAsync(IGameBoard b);
+		IGameMove FindBestMove(IGameBoard b);
 	}
 }

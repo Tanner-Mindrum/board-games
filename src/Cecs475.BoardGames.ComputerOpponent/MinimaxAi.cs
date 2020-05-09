@@ -17,16 +17,13 @@ namespace Cecs475.BoardGames.ComputerOpponent {
 			mMaxDepth = maxDepth;
 		}
 
-		public IGameMove FindBestMoveAsync(IGameBoard b) {
-			return FindBestMove(b,
-					long.MinValue,
-					long.MaxValue,
-					mMaxDepth, b.CurrentPlayer == 1).Move;
+		public IGameMove FindBestMove(IGameBoard b) {
+			return FindBestMove(b, long.MinValue, long.MaxValue, mMaxDepth, b.CurrentPlayer == 1).Move;
 		}
 
-		private static async Task<MinimaxBestMove> FindBestMove(IGameBoard b, long alpha, long beta, int depthLeft, bool isMaximizing) {
+		private static MinimaxBestMove FindBestMove(IGameBoard b, long alpha, long beta, int depthLeft, bool isMaximizing) {
 			if (depthLeft == 0 || b.IsFinished) {
-				return new Task<MinimaxBestMove> {
+				return new MinimaxBestMove {
 					Weight = b.BoardWeight,
 					Move = null
 				};

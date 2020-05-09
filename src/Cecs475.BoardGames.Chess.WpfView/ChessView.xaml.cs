@@ -62,7 +62,7 @@ namespace Cecs475.BoardGames.Chess.WpfView {
         public Control ViewControl => this;
         public IGameViewModel ViewModel => ChessViewModel;
 
-        private void Border_MouseUp(object sender, MouseButtonEventArgs e) {
+        private async void Border_MouseUp(object sender, MouseButtonEventArgs e) {
             Border b = sender as Border;
             var square = b.DataContext as ChessSquare;
             var vm = FindResource("vm") as ChessViewModel;
@@ -84,7 +84,9 @@ namespace Cecs475.BoardGames.Chess.WpfView {
                         var panel = new PawnPromote(vm, selectedSquare.Position, square.Position);
                         panel.Show();
                     } else {
-                        vm.ApplyMove(square.Position, selectedSquare.Position, "");
+                        IsEnabled = false;
+                        await vm.ApplyMove(square.Position, selectedSquare.Position, "");
+                        IsEnabled = true;
                         selectedSquare.IsSelected = false;
                         selectedSquare = null;
                     }
