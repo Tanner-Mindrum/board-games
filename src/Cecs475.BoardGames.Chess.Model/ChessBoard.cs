@@ -16,6 +16,8 @@ namespace Cecs475.BoardGames.Chess.Model {
 
 		public const int BoardSize = 8;
 
+		private IEnumerable<ChessMove> mPossibleMoves;
+
 		// TODO: create a field for the board position array. You can hand-initialize
 		// the starting entries of the array, or set them in the constructor.
 		private byte[] mBoard;
@@ -212,7 +214,7 @@ namespace Cecs475.BoardGames.Chess.Model {
 
 		#region Public methods.
 		public IEnumerable<ChessMove> GetPossibleMoves() {
-			/*if (mMoves != null) return mMoves*/
+			if (mPossibleMoves != null) return mPossibleMoves;
 			ISet<ChessMove> possibleMoves = new HashSet<ChessMove>();
 			var positions = BoardPosition.GetRectangularPositions(8, 8);
 			HashSet<BoardPosition> attackPositions = new HashSet<BoardPosition>();
@@ -342,22 +344,6 @@ namespace Cecs475.BoardGames.Chess.Model {
 				}
 				else if (piece.PieceType == ChessPieceType.Pawn && piece.Player == currentPlayer) {
 					HashSet<BoardPosition> pawnMoves = new HashSet<BoardPosition>();
-					if (currentPlayer == 1 && p.Row == 6 || currentPlayer == 2 && p.Row == 1) {
-						if (currentPlayer == 1) {
-							if (GetPieceAtPosition(new BoardPosition(p.Row - 2, p.Col)).PieceType == ChessPieceType.Empty
-								&& PositionInBounds(new BoardPosition(p.Row - 2, p.Col))
-								&& GetPieceAtPosition(new BoardPosition(p.Row - 1, p.Col)).PieceType == ChessPieceType.Empty) {
-								pawnMoves.Add(new BoardPosition(p.Row - 2, p.Col));
-							}
-						}
-						else {
-							if (GetPieceAtPosition(new BoardPosition(p.Row + 2, p.Col)).PieceType == ChessPieceType.Empty
-								&& PositionInBounds(new BoardPosition(p.Row + 2, p.Col))
-								&& GetPieceAtPosition(new BoardPosition(p.Row + 1, p.Col)).PieceType == ChessPieceType.Empty) {
-								pawnMoves.Add(new BoardPosition(p.Row + 2, p.Col));
-							}
-						}
-					}
 					if (currentPlayer == 1 && GetPieceAtPosition(p).Player == currentPlayer) {
 						BoardPosition pos = p;
 						pos += new BoardDirection(-1, 1);
@@ -487,6 +473,24 @@ namespace Cecs475.BoardGames.Chess.Model {
 					}
 					// End en passant
 
+					// Move forward 2
+					if (currentPlayer == 1 && p.Row == 6 || currentPlayer == 2 && p.Row == 1) {
+						if (currentPlayer == 1) {
+							if (GetPieceAtPosition(new BoardPosition(p.Row - 2, p.Col)).PieceType == ChessPieceType.Empty
+								&& PositionInBounds(new BoardPosition(p.Row - 2, p.Col))
+								&& GetPieceAtPosition(new BoardPosition(p.Row - 1, p.Col)).PieceType == ChessPieceType.Empty) {
+								pawnMoves.Add(new BoardPosition(p.Row - 2, p.Col));
+							}
+						} else {
+							if (GetPieceAtPosition(new BoardPosition(p.Row + 2, p.Col)).PieceType == ChessPieceType.Empty
+								&& PositionInBounds(new BoardPosition(p.Row + 2, p.Col))
+								&& GetPieceAtPosition(new BoardPosition(p.Row + 1, p.Col)).PieceType == ChessPieceType.Empty) {
+								pawnMoves.Add(new BoardPosition(p.Row + 2, p.Col));
+							}
+						}
+					}
+					// End move forward 2
+
 					foreach (BoardPosition v in pawnMoves) {
 						possibleMoves.Add(new ChessMove(p, v));
 					}
@@ -519,8 +523,8 @@ namespace Cecs475.BoardGames.Chess.Model {
 				}
 			}
 
-			return validMoves;
-			//return mMoves = moves;
+			//return validMoves;
+			return mPossibleMoves = validMoves;
 		}
 
 		public void ApplyMove(ChessMove m) {
@@ -695,11 +699,8 @@ namespace Cecs475.BoardGames.Chess.Model {
 			currentPlayer = (currentPlayer == 1) ? 2 : 1;
 			gameStateList.Add(gameState);
 			mMoveHistory.Add(m);
-			//mMoves = null
+			mPossibleMoves = null;
 		}
-
-
-
 
 		public void UndoLastMove() {
 			//If the currentplayer is 1, when undoing the move it will move back
@@ -707,7 +708,6 @@ namespace Cecs475.BoardGames.Chess.Model {
 			if (gameStateList.Count > 0) {
 				currentPlayer = (currentPlayer == 1) ? 2 : 1;
 			}
-
 
 			GameState lastMove = gameStateList.Last();
 
@@ -814,7 +814,7 @@ namespace Cecs475.BoardGames.Chess.Model {
 
 			gameStateList.RemoveAt(gameStateList.Count - 1);
 			mMoveHistory.RemoveAt(mMoveHistory.Count - 1);
-			//mMoves = null;
+			mPossibleMoves = null;
 		}
 
 		/// <summary>
@@ -1016,10 +1016,9 @@ namespace Cecs475.BoardGames.Chess.Model {
 
 		public long BoardWeight {
 			get {
-				int blackAdv = new GameAdvantage(2, advantage * -1).Advantage;
-				int whiteAdv =	new GameAdvantage(1, advantage).Advantage;
+				int blackAdv = -CurrentAdvantage.Advantage;
+				int whiteAdv = CurrentAdvantage.Advantage;
 				var positions = BoardPosition.GetRectangularPositions(8, 8);
-				long whiteWeight, blackWeight;
 				int whitePawnPoints = 0, blackPawnPoints = 0, whiteThreatenPoints = 0, blackThreatenPoints = 0,
 					whiteProtectPoints = 0, blackProtectPoints = 0;
 				var whiteAttackPositions = GetAttackedPositions2(1);
@@ -1027,14 +1026,14 @@ namespace Cecs475.BoardGames.Chess.Model {
 
 				foreach (BoardPosition attPos in whiteAttackPositions) {
 					var currAttPiece = GetPieceAtPosition(attPos);
-					if (currAttPiece.PieceType == ChessPieceType.Knight || currAttPiece.PieceType == ChessPieceType.Knight) {
+					if (currAttPiece.Player == 1 && (currAttPiece.PieceType == ChessPieceType.Knight || currAttPiece.PieceType == ChessPieceType.Bishop)) {
 						whiteProtectPoints++;
 					}
 				}
 
 				foreach (BoardPosition attPos in blackAttackPositions) {
 					var currAttPiece = GetPieceAtPosition(attPos);
-					if (currAttPiece.PieceType == ChessPieceType.Knight || currAttPiece.PieceType == ChessPieceType.Knight) {
+					if (currAttPiece.Player == 2 && (currAttPiece.PieceType == ChessPieceType.Knight || currAttPiece.PieceType == ChessPieceType.Bishop)) {
 						blackProtectPoints++;
 					}
 				}

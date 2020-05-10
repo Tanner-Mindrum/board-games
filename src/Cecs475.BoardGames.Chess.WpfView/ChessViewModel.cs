@@ -132,8 +132,6 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 			var possMoves = mBoard.GetPossibleMoves() as IEnumerable<ChessMove>;
 			// Validate the move as possible.
 			foreach (var move in possMoves) {
-
-
 				if (mBoard.GetPieceAtPosition(move.StartPosition).PieceType.Equals(
 					mBoard.GetPieceAtPosition(startPosition).PieceType) && move.StartPosition.Equals(startPosition) &&
 					move.EndPosition.Equals(endPosition)) {
@@ -159,15 +157,14 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 					}
 				}
 			}
+			RebindState();
 
 			if (Players == NumberOfPlayers.One && !mBoard.IsFinished) {
 				var bestMoveResult = await Task.Run(() => mGameAi.FindBestMove(mBoard));
 				if (bestMoveResult != null)
 					mBoard.ApplyMove(bestMoveResult as ChessMove);
+				RebindState();
 			}
-
-
-			RebindState();
 
 			if (mBoard.IsFinished) {
 				GameFinished?.Invoke(this, new EventArgs());

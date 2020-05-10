@@ -99,6 +99,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Cecs475.BoardGames.Chess.WpfView\Cecs475.BoardGames.Chess.WpfView.csproj">
+      <Project>{A453F6F4-83C9-4436-901D-A80ADDD93100}</Project>
+      <Name>Cecs475.BoardGames.Chess.WpfView</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Cecs475.BoardGames.ComputerOpponent\Cecs475.BoardGames.ComputerOpponent.csproj">
       <Project>{e9251e73-156b-4632-8c0e-4974343859d6}</Project>
       <Name>Cecs475.BoardGames.ComputerOpponent</Name>

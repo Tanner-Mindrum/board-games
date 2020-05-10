@@ -25,14 +25,17 @@ namespace Cecs475.BoardGames.Chess.WpfView {
         public ChessView() {
             InitializeComponent();
         }
+
         private void Border_MouseEnter(object sender, MouseEventArgs e) {
-            if (!IsEnabled)
+
+            if (!IsEnabled) {
                 return;
+            }
 
             Border b = sender as Border;
             var square = b.DataContext as ChessSquare;
             var vm = FindResource("vm") as ChessViewModel;
-          
+
             if (selectedSquare != null) {
                 foreach (ChessMove m in vm.PossibleMoves) {
                     if (m.StartPosition == selectedSquare.Position) {
@@ -45,10 +48,6 @@ namespace Cecs475.BoardGames.Chess.WpfView {
             else if (vm.PossibleStartMoves.Contains(square.Position)) {
                 square.IsHighlighted = true;
             }
-        }
-
-        private void msgBox(object sender, RoutedEventArgs e) {
-            MessageBox.Show("Hello, world!");
         }
 
         private void Border_MouseLeave(object sender, MouseEventArgs e) {
@@ -86,12 +85,13 @@ namespace Cecs475.BoardGames.Chess.WpfView {
                     if ((square.Position.Row == 0 || square.Position.Row == 7) && selectedSquare.Player.PieceType == ChessPieceType.Pawn) {
                         var panel = new PawnPromote(vm, selectedSquare.Position, square.Position);
                         panel.Show();
-                    } else {
+                    }
+                    else {
                         IsEnabled = false;
-                        await vm.ApplyMove(square.Position, selectedSquare.Position, "");
-                        IsEnabled = true;
                         selectedSquare.IsSelected = false;
+                        await vm.ApplyMove(square.Position, selectedSquare.Position, "");
                         selectedSquare = null;
+                        IsEnabled = true;
                     }
                 }
             }
