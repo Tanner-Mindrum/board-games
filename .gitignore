@@ -324,3 +324,5 @@ ASALocalRun/
 
 # Key
 *.snk
+*.BoardGames.snk
+Cecs475.BoardGames.snk
