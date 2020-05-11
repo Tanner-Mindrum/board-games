@@ -1,5 +1,4 @@
-﻿using Cecs475.BoardGames.Chess.WpfView;
-using Cecs475.BoardGames.WpfView;
+﻿using Cecs475.BoardGames.WpfView;
 using System;
 using System.Windows;
 using System.Windows.Controls;
