@@ -71,23 +71,23 @@ namespace Cecs475.BoardGames.Chess.WpfView {
             b.Background = Brushes.LightSlateGray;
         }
 
-        public void BorderQueen_MouseUp(object sender, MouseEventArgs e) {
-            vMod.ApplyMove(endPosi, startPosi, "queen");
+        public async void BorderQueen_MouseUp(object sender, MouseEventArgs e) {
+            await vMod.ApplyMove(endPosi, startPosi, "queen");
             Close();
         }
 
-        public void BorderRook_MouseUp(object sender, MouseEventArgs e) {
-            vMod.ApplyMove(endPosi, startPosi, "rook");
+        public async void BorderRook_MouseUp(object sender, MouseEventArgs e) {
+            await vMod.ApplyMove(endPosi, startPosi, "rook");
             Close();
         }
 
-        public void BorderBishop_MouseUp(object sender, MouseEventArgs e) {
-            vMod.ApplyMove(endPosi, startPosi, "bishop");
+        public async void BorderBishop_MouseUp(object sender, MouseEventArgs e) {
+            await vMod.ApplyMove(endPosi, startPosi, "bishop");
             Close();
         }
 
-        public void BorderKnight_MouseUp(object sender, MouseEventArgs e) {
-            vMod.ApplyMove(endPosi, startPosi, "knight");
+        public async void BorderKnight_MouseUp(object sender, MouseEventArgs e) {
+            await vMod.ApplyMove(endPosi, startPosi, "knight");
             Close();
         }
 

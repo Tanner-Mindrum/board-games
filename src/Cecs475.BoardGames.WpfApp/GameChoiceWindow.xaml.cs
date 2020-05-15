@@ -32,9 +32,7 @@ namespace Cecs475.BoardGames.WpfApp {
 
 			foreach (var dllFile in dlls) {
 				if (System.IO.Path.GetExtension(dllFile.File) == ".dll") {
-					Console.WriteLine(dllFile.File);
 					string filename = System.IO.Path.GetFileName(dllFile.File.Substring(0, dllFile.File.Length - 4));
-					Console.WriteLine(filename);
 					Assembly.Load(filename + ", Version=1.0.0.0" + ", Culture=neutral, " + "PublicKeyToken=68e71c13048d452a");
 					//Assembly.LoadFrom(dllFile.File);
 				}

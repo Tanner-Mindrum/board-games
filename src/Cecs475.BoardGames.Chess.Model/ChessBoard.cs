@@ -1016,13 +1016,6 @@ namespace Cecs475.BoardGames.Chess.Model {
 
 		public long BoardWeight {
 			get {
-				long blackAdv = -CurrentAdvantage.Advantage;
-				long whiteAdv = CurrentAdvantage.Advantage;
-				if (blackAdv > 0) {
-					whiteAdv = 0;
-				} else if (whiteAdv > 0) {
-					blackAdv = 0;
-				}
 
 				var positions = BoardPosition.GetRectangularPositions(8, 8);
 				long whitePawnPoints = 0, blackPawnPoints = 0, whiteThreatenPoints = 0, blackThreatenPoints = 0,
@@ -1086,8 +1079,11 @@ namespace Cecs475.BoardGames.Chess.Model {
 						whitePawnPoints += 6 - pos.Row;
 					}
 				}
-				return (whiteAdv + whitePawnPoints + whiteThreatenPoints + whiteProtectPoints) -
-					(blackAdv + blackPawnPoints + blackThreatenPoints + blackProtectPoints);
+
+				long weight = (whitePawnPoints + whiteThreatenPoints + whiteProtectPoints) -
+					(blackPawnPoints + blackThreatenPoints + blackProtectPoints);
+				return (CurrentAdvantage.Player == 1) ?
+					weight += CurrentAdvantage.Advantage : weight -= CurrentAdvantage.Advantage; 
 			}
 		}
 		#endregion
